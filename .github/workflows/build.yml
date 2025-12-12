@@ -8,12 +8,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Build & pack single-file exe
-        run: dotnet publish -c Release
-
-      - name: Upload exe
-        uses: actions/upload-artifact@v4
+      - run: dotnet publish -c Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+      - uses: actions/upload-artifact@v4
         with:
           name: QuickPaste-win-x64
-          path: bin/Release/net8.0/win-x64/publish/*.exe
+          path: bin/Release/net8.0-windows/win-x64/publish/*.exe
