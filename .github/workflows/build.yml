@@ -1,27 +1,22 @@
-name: build-exe
+name: Build QuickPaste.exe
 
 on:
-  workflow_dispatch:   # manual button on GitHub
   push:
-    paths: ['QuickPaste.cs']
+  pull_request:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest        # already has .NET SDK
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Build
-        shell: pwsh
-        run: |
-          $code = Get-Content QuickPaste.cs -Raw
-          Add-Type -TypeDefinition $code `
-                   -ReferencedAssemblies System.Windows.Forms.dll `
-                   -OutputType ConsoleApplication `
-                   -OutputAssembly QuickPaste.exe
+    - name: Build & pack single-file exe
+      run: |
+        dotnet publish -c Release
+        # artefact lands in  bin\Release\net8.0\win-x64\publish\QuickPaste.exe
 
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: QuickPaste.exe
-          path: QuickPaste.exe
+    - name: Upload exe
+      uses: actions/upload-artifact@v4
+      with:
+        name: QuickPaste-win-x64
+        path: bin/Release/net8.0/win-x64/publish/QuickPaste.exe
