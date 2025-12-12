@@ -5,17 +5,15 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest        # already has .NET SDK
+    runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Build & pack single-file exe
-      run: |
-        dotnet publish -c Release
-        # artefact lands in  bin\Release\net8.0\win-x64\publish\QuickPaste.exe
+      - name: Build & pack single-file exe
+        run: dotnet publish -c Release
 
-    - name: Upload exe
-      uses: actions/upload-artifact@v4
-      with:
-        name: QuickPaste-win-x64
-        path: bin/Release/net8.0/win-x64/publish/QuickPaste.exe
+      - name: Upload exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: QuickPaste-win-x64
+          path: bin/Release/net8.0/win-x64/publish/*.exe
